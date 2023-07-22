@@ -17,6 +17,7 @@ from sklearn.preprocessing import LabelEncoder
 import os
 import nltk
 nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
+nltk.download('averaged_perceptron_tagger', download_dir='./nltk_data/')
 from nltk import word_tokenize, pos_tag
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
