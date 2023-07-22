@@ -1,0 +1,10 @@
+sklearn
+nltk
+gensim
+pandas
+tqdm
+tensorflow
+transformers
+joblib
+numpy
+streamlit
