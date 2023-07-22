@@ -61,19 +61,19 @@ def get_model(model_name):
         else:
             sentiment_model = None
     elif model_name == "CNN":
-        model_path = "./Models/sentiment_CNN.h5"
+        model_path = "./Models/sentiment_model_CNN/sentiment_CNN.h5"
         if os.path.exists(model_path):
             sentiment_model = load_model(model_path, compile=False)
         else:
             sentiment_model = None
     elif model_name == "LSTM":
-        model_path = "./Models/sentiment_LSTM.h5"
+        model_path = "./Models/sentiment_model_LSTM/sentiment_LSTM.h5"
         if os.path.exists(model_path):
             sentiment_model = load_model(model_path, compile=False)
         else:
             sentiment_model = None
     else:  # model_name == "Transformer"
-        model_path = "./Models/sentiment_model_bert/"
+        model_path = "./Models/sentiment_model_bert/tf_model.h5"
         if os.path.exists(model_path):
             sentiment_model = TFDistilBertForSequenceClassification.from_pretrained(model_path)
         else:
