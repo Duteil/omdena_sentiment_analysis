@@ -14,6 +14,8 @@ processed data into a new CSV file.
 """
 
 from sklearn.preprocessing import LabelEncoder
+import nltk
+nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
 from nltk import word_tokenize, pos_tag
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
