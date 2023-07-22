@@ -3,6 +3,7 @@ from tensorflow.keras.models import load_model
 from sklearn.svm import LinearSVC
 from transformers.models.distilbert import TFDistilBertForSequenceClassification
 import pickle
+import os
 from joblib import load
 import numpy as np
 import streamlit as st
@@ -27,16 +28,24 @@ for message in st.session_state.messages:
 
 @st.cache_resource
 def vec(model_name):
-    # Load the saved vectorizer from a file
     if model_name == "LinearSVC":
-        with open("./Models/sentiment_model_linearSVC/vectorizer.joblib", "rb") as f:
-            vectorizer = load(f)
+        vectorizer_path = "./Models/sentiment_model_linearSVC/vectorizer.joblib"
+        if os.path.exists(vectorizer_path):
+            with open(vectorizer_path, "rb") as f:
+                vectorizer = load(f)
+        else:
+            vectorizer = None
     elif model_name in ["CNN", "LSTM"]:
-        with open("./Models/sentiment_model_" + model_name + "/vectorizer_cnn.joblib", "rb") as f:
-            vectorizer = load(f)
+        vectorizer_path = "./Models/sentiment_model_" + model_name + "/vectorizer_cnn.joblib"
+        if os.path.exists(vectorizer_path):
+            with open(vectorizer_path, "rb") as f:
+                vectorizer = load(f)
+        else:
+            vectorizer = None
     elif model_name == "Transformer":
         vectorizer = None  # Transformers use their own tokenization, so no vectorizer is needed
     return vectorizer
+
 
 # Display model selection box
 st.sidebar.title("Model Selection")
@@ -46,13 +55,30 @@ text_vectorizer = vec(model_name)
 @st.cache_resource
 def get_model(model_name):
     if model_name == "LinearSVC":
-        sentiment_model = load("./Models/sentiment_model_linearSVC/sentiment_svc.joblib")
+        model_path = "./Models/sentiment_model_linearSVC/sentiment_svc.joblib"
+        if os.path.exists(model_path):
+            sentiment_model = load(model_path)
+        else:
+            sentiment_model = None
     elif model_name == "CNN":
-        sentiment_model = load_model("./Models/sentiment_CNN.h5", compile=False)
+        model_path = "./Models/sentiment_CNN.h5"
+        if os.path.exists(model_path):
+            sentiment_model = load_model(model_path, compile=False)
+        else:
+            sentiment_model = None
     elif model_name == "LSTM":
-        sentiment_model = load_model("./Models/sentiment_LSTM.h5", compile=False)
+        model_path = "./Models/sentiment_LSTM.h5"
+        if os.path.exists(model_path):
+            sentiment_model = load_model(model_path, compile=False)
+        else:
+            sentiment_model = None
     else:  # model_name == "Transformer"
-        sentiment_model = TFDistilBertForSequenceClassification.from_pretrained("./Models/sentiment_model_bert/")
+        model_path = "./Models/sentiment_model_bert/"
+        if os.path.exists(model_path):
+            sentiment_model = TFDistilBertForSequenceClassification.from_pretrained(model_path)
+        else:
+            sentiment_model = None
+
     return sentiment_model
 
 def predict_and_color_text(text, model_name):
